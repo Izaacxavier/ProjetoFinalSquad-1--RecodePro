@@ -1,0 +1,10 @@
+.header-img{
+    width: 400px;
+    margin-top: 8em;
+}
+.title-page{
+    display: flex;
+    justify-content: flex-start;
+    font-size: 32px;
+    padding: 5px;
+}
