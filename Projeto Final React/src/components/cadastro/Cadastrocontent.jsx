@@ -2,97 +2,166 @@ import "./Cadastrocontent.css";
 
 //Use form & yup
 import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 // importaçoes
 import { Titlepagecadastrar } from "./Titlepagecadastrar";
 import { Stepcontent } from "./Stepcontent";
 
 export const Cadastrocontent = () => {
+  // Validação
+  const schema = yup
+    .object({
+      // Dados pessoais
+      nome: yup.string().required("Campo é obrigatorio"),
+      cpf: yup
+        .string()
+        .min(11, "CPF não é valido")
+        .required("Campo é obrigatorio"),
+      nascimento: yup.string().required("Campo é obrigatorio"),
+      telefone: yup.string().required("Campo é obrigatorio"),
 
-   // Validação
-  const schema = yup.object({
+      //Endereço
+      cep: yup.string().required("Campo é obrigatorio"),
+      bairro: yup.string().required("Campo é obrigatorio"),
+      rua: yup.string().required("Campo é obrigatorio"),
+      numero: yup.string().required("Campo é obrigatorio"),
+      cidade: yup.string().required("Campo é obrigatorio"),
+      estado: yup.string().required("Campo é obrigatorio"),
 
-    // Dados pessoais
-    nome: yup.string().required("Campo é obrigatorio"),
-    cpf: yup.string().min(11, "CPF não é valido" ).required("Campo é obrigatorio"),
-    nascimento: yup.string().required("Campo é obrigatorio"),
-    telefone: yup.string().required("Campo é obrigatorio"),
+      //Dados de acesso
+      email: yup
+        .string()
+        .email("O email não é valido")
+        .required("Campo é obrigatorio"),
+      emailconfirm: yup
+        .string()
+        .email("O email não é valido")
+        .required("Campo é obrigatorio")
+        .oneOf([yup.ref("email")], "O email não conferem"),
+      password: yup
+        .string()
+        .min(8, "A senha deve ter no min 8 caracteres")
+        .required("Campo é obrigatorio"),
+      passwordconfirm: yup
+        .string()
+        .required("Campo é obrigatorio")
+        .oneOf([yup.ref("password")], "A senhas não conferem"),
+    })
+    .required();
 
-    //Endereço
-    cep: yup.string().required("Campo é obrigatorio"),
-    bairro: yup.string().required("Campo é obrigatorio"),
-    rua: yup.string().required("Campo é obrigatorio"),
-    numero: yup.string().required("Campo é obrigatorio"),
-    cidade: yup.string().required("Campo é obrigatorio"),
-    estado: yup.string().required("Campo é obrigatorio"),
-
-    //Dados de acesso
-    email: yup.string().email("O email não é valido").required("Campo é obrigatorio"),
-    emailconfirm: yup.string().email("O email não é valido").required("Campo é obrigatorio").oneOf([yup.ref("email")], "O email não conferem"),
-    password: yup.string().min(8, "A senha deve ter no min 8 caracteres").required("Campo é obrigatorio"),
-    passwordconfirm: yup.string().required("Campo é obrigatorio").oneOf([yup.ref("password")], "A senhas não conferem"),
-    
-  }).required();
-  
-  const { register, handleSubmit,  formState: { errors } } = useForm({resolver: yupResolver(schema)});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
 
   //Genrenciamento de dados
- 
-  function onsubmit (userdata) {
-    console.log(userdata);
-  };
 
+  function onsubmit(userdata) {
+    console.log(userdata);
+  }
 
   return (
     <div class="container container-form-cadastro">
       <div class="row">
         <Stepcontent />
         <div className="form-content-right-side col-md-9">
-         
-            <Titlepagecadastrar />
-           
-          <form  onSubmit={handleSubmit(onsubmit)} className="cadastro-content">
+          <Titlepagecadastrar />
+
+          <form onSubmit={handleSubmit(onsubmit)} className="cadastro-content">
             <fieldset className="group1">
               <div className="group-left-side">
                 <div className="input-cadastro">
-                  <label id="nome" htmlFor="name">Nome completo
-                  { errors.nome && <small style={{color:"red", marginLeft:"10px"}}>{errors.nome?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> } 
+                  <label id="nome" htmlFor="name">
+                    Nome completo
+                    {errors.nome && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.nome?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
-                  <input id="nome" type="text" name="name" {...register("nome", { required: true })} placeholder="Digite seu nome" />
-                  
+                  <input
+                    id="nome"
+                    type="text"
+                    name="name"
+                    {...register("nome", { required: true })}
+                    placeholder="Digite seu nome"
+                  />
                 </div>
-                
 
                 <div className="input-cadastro">
-                  <label htmlFor="cpf">CPF
-                  {errors.cpf && <small style={{color:"red", marginLeft:"10px"}}>{errors.cpf?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> }
+                  <label htmlFor="cpf">
+                    CPF
+                    {errors.cpf && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.cpf?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
-                  <input type="text" name="cpf" {...register("cpf", { required: true })} minLength={11} maxLength={11} placeholder="Digite seu CPF" />
+                  <input
+                    type="text"
+                    name="cpf"
+                    {...register("cpf", { required: true })}
+                    minLength={11}
+                    maxLength={11}
+                    placeholder="Digite seu CPF"
+                  />
                 </div>
               </div>
 
               <div className="group-right-side">
                 <div className="input-cadastro">
-                  <label htmlFor="nascimento">Data de nascimento
-                  {errors.nascimento && <small style={{color:"red", marginLeft:"10px"}}>{errors.nascimento?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> }
+                  <label htmlFor="nascimento">
+                    Data de nascimento
+                    {errors.nascimento && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.nascimento?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
-                  <input type="date" name="nascimento" {...register("nascimento", { required: true })} />
+                  <input
+                    type="date"
+                    name="nascimento"
+                    {...register("nascimento", { required: true })}
+                  />
                 </div>
 
                 <div className="input-cadastro">
-                  <label htmlFor="telefone">Telefone:
-                  {errors.nascimento && <small style={{color:"red", marginLeft:"10px"}}>{errors.telefone?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> }
+                  <label htmlFor="telefone">
+                    Telefone:
+                    {errors.nascimento && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.telefone?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
-                  <input type="tel" name="telefone" {...register("telefone", { required: true })}  maxLength={15} minLength={11} placeholder="(xx) xxxxx-xxxx"/>
+                  <input
+                    type="tel"
+                    name="telefone"
+                    {...register("telefone", { required: true })}
+                    maxLength={15}
+                    minLength={11}
+                    placeholder="(xx) xxxxx-xxxx"
+                  />
                 </div>
               </div>
             </fieldset>
 
             <div className="select">
               <div className="input-cadastro">
-                <label htmlFor="sexo">Sexo: 
-                {errors.sexo && <small style={{color:"red", marginLeft:"10px"}}>Campo obrigatorio <i class="bi bi-exclamation-octagon-fill"></i> </small> }
+                <label htmlFor="sexo">
+                  Sexo:
+                  {errors.sexo && (
+                    <small style={{ color: "red", marginLeft: "10px" }}>
+                      Campo obrigatorio{" "}
+                      <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                    </small>
+                  )}
                 </label>
                 <label htmlFor="">
                   <input type="radio" id="sexo" name="sexo" value="Masculino" />
@@ -100,12 +169,12 @@ export const Cadastrocontent = () => {
                 </label>
 
                 <label htmlFor="">
-                  <input type="radio" id="sexo" name="sexo"  value="Feminino"/>
+                  <input type="radio" id="sexo" name="sexo" value="Feminino" />
                   Feminino
                 </label>
 
                 <label htmlFor="">
-                  <input type="radio" id="sexo" name="sexo" value="Não diz"/>
+                  <input type="radio" id="sexo" name="sexo" value="Não diz" />
                   Prefiro não informar
                 </label>
               </div>
@@ -113,22 +182,49 @@ export const Cadastrocontent = () => {
 
             <fieldset className="group2">
               <div className="group-left-side">
-
-              <div className="input-cadastro">
-                  <label htmlFor="cep">CEP:
-                  {errors.cep && <small style={{color:"red", marginLeft:"10px"}}>{errors.cep?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> } 
+                <div className="input-cadastro">
+                  <label htmlFor="cep">
+                    CEP:
+                    {errors.cep && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.cep?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
-                  <input type="text" name="cep" {...register("cep", { required: true })} placeholder="Digite seu cep " />
+                  <input
+                    type="text"
+                    name="cep"
+                    {...register("cep", { required: true })}
+                    placeholder="Digite seu cep "
+                  />
                 </div>
                 <div className="input-cadastro">
-                  <label htmlFor="rua">Rua:
-                  {errors.rua && <small style={{color:"red", marginLeft:"10px"}}>{errors.rua?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> } 
+                  <label htmlFor="rua">
+                    Rua:
+                    {errors.rua && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.rua?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
-                  <input type="text" name="rua" {...register("rua", { required: true })} placeholder="Rua, avenida " />
+                  <input
+                    type="text"
+                    name="rua"
+                    {...register("rua", { required: true })}
+                    placeholder="Rua, avenida "
+                  />
                 </div>
                 <div className="input-cadastro">
-                  <label htmlFor="cidade">Cidade:
-                  {errors.cidade && <small style={{color:"red", marginLeft:"10px"}}>{errors.cidade?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> } 
+                  <label htmlFor="cidade">
+                    Cidade:
+                    {errors.cidade && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.cidade?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
                   <input
                     type="text"
@@ -137,14 +233,18 @@ export const Cadastrocontent = () => {
                     placeholder="Digite sua cidade"
                   />
                 </div>
-
               </div>
 
               <div className="group-right-side">
-
-              <div className="input-cadastro">
-                  <label htmlFor="bairro">Bairro:
-                  {errors.bairro && <small style={{color:"red", marginLeft:"10px"}}>{errors.bairro?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> } 
+                <div className="input-cadastro">
+                  <label htmlFor="bairro">
+                    Bairro:
+                    {errors.bairro && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.bairro?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
                   <input
                     type="text"
@@ -155,8 +255,14 @@ export const Cadastrocontent = () => {
                 </div>
 
                 <div className="input-cadastro">
-                  <label htmlFor="numero">Numero:
-                  {errors.numero && <small style={{color:"red", marginLeft:"10px"}}>{errors.numero?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> } 
+                  <label htmlFor="numero">
+                    Numero:
+                    {errors.numero && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.numero?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
                   <input
                     type="text"
@@ -167,8 +273,14 @@ export const Cadastrocontent = () => {
                 </div>
 
                 <div class="input-cadastro">
-                  <label htmlFor="estado">Estado:
-                  {errors.estado && <small style={{color:"red", marginLeft:"10px"}}>{errors.estado?.message} <i class="bi bi-exclamation-octagon-fill"></i> </small> }
+                  <label htmlFor="estado">
+                    Estado:
+                    {errors.estado && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.estado?.message}{" "}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
                   <select
                     class="form-select "
@@ -214,7 +326,13 @@ export const Cadastrocontent = () => {
               <div className="select2">
                 <label htmlFor="nome">Trabalha atualmente?</label>
                 <label htmlFor="">
-                  <input type="radio" id="vuln" name="vuln" value="sim" checked/>
+                  <input
+                    type="radio"
+                    id="vuln"
+                    name="vuln"
+                    value="sim"
+                    checked
+                  />
                   sim
                 </label>
 
@@ -227,12 +345,18 @@ export const Cadastrocontent = () => {
               <div className="select2">
                 <label htmlFor="nome">Se sim, é de carteira assinada?</label>
                 <label htmlFor="">
-                  <input type="radio" id="vuln" name="vuln" value="sim" checked/>
+                  <input
+                    type="radio"
+                    id="vuln"
+                    name="vuln"
+                    value="sim"
+                    checked
+                  />
                   sim
                 </label>
 
                 <label htmlFor="">
-                  <input type="radio" id="vuln" name="vuln"  value="Não" />
+                  <input type="radio" id="vuln" name="vuln" value="Não" />
                   Não
                 </label>
               </div>
@@ -242,12 +366,18 @@ export const Cadastrocontent = () => {
                   Já fez algum trabalho de carteira assinada?
                 </label>
                 <label htmlFor="">
-                  <input type="radio" id="vuln" name="vuln"  value="sim"checked/>
+                  <input
+                    type="radio"
+                    id="vuln"
+                    name="vuln"
+                    value="sim"
+                    checked
+                  />
                   sim
                 </label>
 
                 <label htmlFor="">
-                  <input type="radio" id="vuln" name="vuln"  value="Não"/>
+                  <input type="radio" id="vuln" name="vuln" value="Não" />
                   Não
                 </label>
               </div>
@@ -265,15 +395,30 @@ export const Cadastrocontent = () => {
             <fieldset className="group4">
               <div className="group-left-side">
                 <div className="input-cadastro">
-                  <label htmlFor="email">Email
-                  {errors.email && <small style={{color:"red", marginLeft:"10px"}}>{errors.email?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> } 
+                  <label htmlFor="email">
+                    Email
+                    {errors.email && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.email?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
-                  <input  {...register("email", { required: true })} placeholder="Digite seu email" />
+                  <input
+                    {...register("email", { required: true })}
+                    placeholder="Digite seu email"
+                  />
                 </div>
 
                 <div className="input-cadastro">
-                  <label htmlFor="password">Senha
-                  {errors.password && <small style={{color:"red", marginLeft:"10px"}}>{errors.password?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> }
+                  <label htmlFor="password">
+                    Senha
+                    {errors.password && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.password?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
                   <input
                     type="password"
@@ -287,15 +432,31 @@ export const Cadastrocontent = () => {
 
               <div className="group-right-side">
                 <div className="input-cadastro">
-                  <label htmlFor="emailconfirm">Confirme seu email
-                  {errors.emailconfirm && <small style={{color:"red", marginLeft:"10px"}}>{errors.emailconfirm?.message}<i class="bi bi-exclamation-octagon-fill"></i> </small> } 
+                  <label htmlFor="emailconfirm">
+                    Confirme seu email
+                    {errors.emailconfirm && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.emailconfirm?.message}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
-                  <input  name="emailconfirm" {...register("emailconfirm", { required: true })} placeholder="Digite seu email" />
+                  <input
+                    name="emailconfirm"
+                    {...register("emailconfirm", { required: true })}
+                    placeholder="Digite seu email"
+                  />
                 </div>
 
                 <div className="input-cadastro">
-                  <label htmlFor="passwordconfirm">Confirme sua senha
-                  {errors.passwordconfirm && <small style={{color:"red", marginLeft:"10px"}}>{errors.passwordconfirm?.message} <i class="bi bi-exclamation-octagon-fill"></i> </small> }
+                  <label htmlFor="passwordconfirm">
+                    Confirme sua senha
+                    {errors.passwordconfirm && (
+                      <small style={{ color: "red", marginLeft: "10px" }}>
+                        {errors.passwordconfirm?.message}{" "}
+                        <i class="bi bi-exclamation-octagon-fill"></i>{" "}
+                      </small>
+                    )}
                   </label>
                   <input
                     type="password"
@@ -307,8 +468,9 @@ export const Cadastrocontent = () => {
                 </div>
               </div>
             </fieldset>
-            <button className="btn-cadastro" type="submit">Enviar</button>
-            
+            <button className="btn-cadastro" type="submit">
+              Enviar
+            </button>
           </form>
         </div>
       </div>

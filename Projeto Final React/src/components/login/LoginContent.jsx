@@ -21,9 +21,7 @@ export const LoginContent = () => {
           <Titlelogin />
           <form className="login-content">
             <div className="input-login">
-              <label htmlFor="password">
-                Email  
-              </label>
+              <label htmlFor="password">Email</label>
               <input type="email" placeholder="Digite seu email" />
             </div>
 

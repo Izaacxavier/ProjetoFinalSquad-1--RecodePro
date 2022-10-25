@@ -7,9 +7,8 @@ import imgContent from "../../img/teste.jpg";
 import "./Content.css";
 
 export default function Content() {
-
   //redirect
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div class="container-fluid">
@@ -60,7 +59,10 @@ export default function Content() {
                   urbanas.
                 </p>
                 <div className="btn-principal">
-                  <button class=" btn btn-primary" onClick={() => navigate('/sobre')}>
+                  <button
+                    class=" btn btn-primary"
+                    onClick={() => navigate("/sobre")}
+                  >
                     Saiba mais sobre o nosso projeto
                   </button>
                 </div>
@@ -69,8 +71,6 @@ export default function Content() {
           </div>
         </div>
       </section>
-
-      
     </div>
   );
 }
